@@ -79,33 +79,35 @@ local Button =
         }
     )
 
-    local ToggleAutoAttackMushrooms = MainTab:CreateToggle({
-        Name = "Auto Attack Mushrooms 🍄 (lvl1)",  -- Nom de la bascule
-        CurrentValue = false,               -- Valeur initiale
-        Flag = "AutoAttackMushroomsToggle",  -- Identifiant de la bascule
-        Callback = function(Value)
-            if Value then
-                _G.AutoAttackMushroomsActive = true
-                
-                while _G.AutoAttackMushroomsActive do
-                    wait(0.1)
-    
-                    -- Définit l'argument pour l'attaque
-                    local args = {
-                        [1] = {
-                            ["isLocalNPC"] = true,  -- Indique que c'est un NPC local
-                            ["npcName"] = "Lvl1"    -- Nom du NPC (champignon de niveau 1)
+
+        local ToggleAttackMushrooms = MainTab:CreateToggle({
+            Name = "Attack Mushrooms 🍄",  -- Nom de la bascule
+            CurrentValue = false,           -- Valeur initiale
+            Flag = "AttackMushroomsToggle", -- Identifiant de la bascule
+            Callback = function(Value)
+                if Value then
+                    _G.AttackMushroomsActive = true
+                    
+                    while _G.AttackMushroomsActive do
+                        wait()
+        
+                        -- Définit l'argument pour infliger des dégâts
+                        local args = {
+                            [1] = {
+                                ["isLocalNPC"] = true,  -- Indique que c'est un NPC local
+                                ["npcName"] = "Lvl1"    -- Nom du NPC (champignon de niveau 1)
+                            }
                         }
-                    }
-    
-                    -- Appelle l'événement d'attaque
-                    game:GetService("ReplicatedStorage").Remotes.Attack:FireServer(unpack(args))
+        
+                        -- Appelle l'événement pour infliger des dégâts
+                        game:GetService("ReplicatedStorage").Events.DamageEvent:FireServer(unpack(args))
+                    end
+                else
+                    _G.AttackMushroomsActive = false
                 end
-            else
-                _G.AutoAttackMushroomsActive = false
-            end
-        end,
-    })
+            end,
+        })
+        
     
     local ToggleCoins = MainTab:CreateToggle({
         Name = "Coins Collection 💰 (lvl1)",  -- Nom de la bascule
@@ -116,7 +118,7 @@ local Button =
                 _G.CoinsActive = true
                 
                 while _G.CoinsActive do
-                    wait(0.1)
+                    wait()
     
                     -- Définit l'argument pour signaler que le NPC est mort
                     local args = {
@@ -144,7 +146,7 @@ local Button =
                 _G.InfHealthActive = true
                 
                 while _G.InfHealthActive do
-                    wait(0.1)
+                    wait()
     
                     -- Définit l'argument pour infliger des dégâts infinis
                     local args = {
